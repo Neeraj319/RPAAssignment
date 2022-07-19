@@ -1,8 +1,11 @@
 from fastapi import FastAPI
-import uvicorn
+from core import routes
 
-app = FastAPI()
+app = FastAPI(name="Video Upload")
+
+app.include_router(routes.router)
 
 
-if __name__ == "__main__":
-    uvicorn.run("main:app", host="localhost", port=8000, log_level="info", reload=True)
+@app.get("/")
+def root():
+    return "welcome to the api got to /docs for more "
