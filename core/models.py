@@ -12,7 +12,7 @@ class Video(Base):
     __tablename__ = "videos"
 
     id = Column(Integer, primary_key=True, index=True)
-    title = Column(VARCHAR(length=255), nullable=False)
+    title = Column(VARCHAR(length=255), nullable=True)
     url = Column(VARCHAR(length=200), nullable=False, unique=True)
     created_at = Column(
         DateTime(timezone=True),

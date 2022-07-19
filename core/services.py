@@ -18,5 +18,12 @@ def insert_video(
     return db_video
 
 
-def get_videos(db_session: Session):
+def get_videos_fromdb(db_session: Session):
     return db_session.query(models.Video).all()
+
+
+def get_video_by_id(
+    video_id: int,
+    db_session: Session,
+):
+    return db_session.query(models.Video).get(video_id)
