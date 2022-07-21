@@ -19,3 +19,4 @@ class Video(Base):
         nullable=False,
         default=func.now(),
     )
+    status = Column(VARCHAR(length=200), nullable=True)

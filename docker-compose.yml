@@ -8,6 +8,7 @@ services:
       - .:/app
     depends_on:
       - db
+      - redis_hughie
     env_file: .env
   db:
     image: postgres:13-alpine
@@ -19,6 +20,17 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=video_db
+  redis_hughie:
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning
+    volumes:
+      - cache:/data
+
 
 volumes:
   postgres_data:
+  cache:
+    driver: local

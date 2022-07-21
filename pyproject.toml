@@ -16,7 +16,8 @@ psycopg2-binary = "^2.9.3"
 alembic = "^1.8.1"
 python-multipart = "^0.0.5"
 starlette-validation-uploadfile = "^0.1.1"
-moviepy = "^1.0.3"
+huey = "^2.4.3"
+redis = "^4.3.4"
 
 [tool.poetry.dev-dependencies]
 
