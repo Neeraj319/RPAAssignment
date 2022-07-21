@@ -30,7 +30,7 @@ async def get_video(
 
 async def post_video(
     id: int,
-    file: UploadFile = Depends(core_dependencies.FileContentChecker()),
+    file: UploadFile = Depends(core_dependencies.VideoLengthChecker()),
     db_session: Session = Depends(db_init.get_db),
 ):
     if video := core_services.get_video_by_id(video_id=id, db_session=db_session):

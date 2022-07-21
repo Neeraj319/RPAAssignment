@@ -2,7 +2,7 @@ import sqlalchemy
 import videostore.settings as settings
 from sqlalchemy.orm import sessionmaker
 
-engine = sqlalchemy.create_engine(settings.DB_URL, echo=True)
+engine = sqlalchemy.create_engine(settings.DB_URL)
 
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

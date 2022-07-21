@@ -1,7 +1,9 @@
 from fastapi import FastAPI
 from core import routes
 
+
 app = FastAPI(name="Video Upload")
+
 
 app.include_router(routes.router)
 
