@@ -1,3 +1,3 @@
 #!/bin/bash
 
-dramatiq woker_init --watch .
+dramatiq worker_init --watch .
