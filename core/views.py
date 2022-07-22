@@ -5,6 +5,7 @@ from core import services as core_services
 from core import schema as core_schema
 from fastapi import status
 from . import dependencies as core_dependencies
+from worker import woker_init
 
 
 async def get_videos(db_session: Session = Depends(db_init.get_db)):
@@ -29,10 +30,17 @@ async def get_video(
 
 
 async def post_video(
-    id: int,
-    file: UploadFile = Depends(core_dependencies.VideoLengthChecker()),
+    file: UploadFile = Depends(core_dependencies.FileTypeChecker()),
     db_session: Session = Depends(db_init.get_db),
 ):
-    if video := core_services.get_video_by_id(video_id=id, db_session=db_session):
-        return file.__dict__
-    return Response(status_code=status.HTTP_404_NOT_FOUND)
+    with open(f"uploads/{file.filename}", "wb") as f:
+        f.write(file.file.read())
+    video_pydantic = core_schema.VideoPydanticModel(
+        url=file.filename, status="video on queue"
+    )
+    video: core_schema.VideoPydanticModel = core_services.insert_video(
+        video_schema=video_pydantic, db_session=db_session
+    )
+
+    woker_init.check_video_size.send(video_id=video.id)
+    return video

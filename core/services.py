@@ -6,7 +6,7 @@ from . import models
 def insert_video(
     db_session: Session,
     video_schema: core_schema.VideoPydanticModel,
-):
+) -> core_schema.VideoPydanticModel:
 
     db_video = models.Video(
         title=video_schema.title,

@@ -7,13 +7,5 @@ router = APIRouter(prefix="/video", tags=["Video Upload"])
 
 
 router.get("/")(views.get_videos)
-
-router.post(
-    "/",
-    response_model=core_schema.VideoPydanticModel,
-)(views.pre_post_video)
-router.get(
-    "/{id}/",
-    response_model=core_schema.VideoPydanticModel,
-)(views.get_video)
-router.post("/{id}/")(views.post_video)
+router.get("/{id}/", response_model=core_schema.VideoPydanticModel)(views.get_video)
+router.post("/")(views.post_video)
