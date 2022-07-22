@@ -6,10 +6,12 @@ services:
       - 8000:8000
     volumes:
       - .:/app
+      - video_uploads:/app/uploads
     depends_on:
       - db
       - redis_hughie
     env_file: .env
+  
   db:
     image: postgres:13-alpine
     volumes:
@@ -20,7 +22,17 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=video_db
-  redis_hughie:
+    
+  worker:
+    build: worker
+    volumes:
+      - ./worker/:/worker
+      - video_uploads:/worker/uploads
+    depends_on:
+      - redis_hughie
+      - app
+    
+  redis_dramatiq:
     image: redis:6.2-alpine
     restart: always
     ports:
@@ -32,5 +44,6 @@ services:
 
 volumes:
   postgres_data:
+  video_uploads:
   cache:
     driver: local

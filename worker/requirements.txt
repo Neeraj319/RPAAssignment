@@ -1,0 +1,15 @@
+async-timeout==4.0.2
+Deprecated==1.2.13
+dramatiq==1.13.0
+gevent==21.12.0
+greenlet==1.1.2
+packaging==21.3
+prometheus-client==0.14.1
+psycopg2-binary==2.9.3
+pyparsing==3.0.9
+redis==4.3.4
+watchdog==2.1.9
+watchdog-gevent==0.1.1
+wrapt==1.14.1
+zope.event==4.5.0
+zope.interface==5.4.0
