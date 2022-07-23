@@ -5,7 +5,7 @@ from core import services
 from core import schema as core_schema
 from fastapi import status
 from . import dependencies
-
+from starlette.responses import StreamingResponse
 import string, random
 
 
@@ -51,3 +51,20 @@ async def post_video(
     background_task.add_task(services.write_to_disk, file=file, video_id=video.id)
 
     return video
+
+
+def get_data_from_file(file_path: str):
+    with open(file_path, "rb") as f:
+        yield f.read()
+
+
+async def stream_video(file_name: str):
+    try:
+        file_content = get_data_from_file(f"uploads/{file_name}")
+        return StreamingResponse(
+            content=file_content,
+            media_type="video/mp4",
+            status_code=status.HTTP_200_OK,
+        )
+    except FileNotFoundError:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)

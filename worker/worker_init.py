@@ -37,9 +37,7 @@ def check_video_length(video_id: int):
                 (video_id,),
             )
             connection.commit()
-            subprocess.call(
-                "rm uploads/{file_name}".format(file_name=data[0]), shell=False
-            )
+            os.remove(f"uploads/{data[0]}")
             return
         cursor.execute(
             "UPDATE videos SET status = 'done' WHERE id = %s",
@@ -67,7 +65,7 @@ def check_video_size(video_id: int):
                 (video_id,),
             )
             connection.commit()
-            subprocess.call(f"rm uploads/{data[0]}", shell=False)
+            os.remove(f"uploads/{file_name}")
             return
 
         check_video_length.send(video_id=video_id)
