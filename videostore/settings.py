@@ -1,3 +1,6 @@
+"""
+All the settings of the application are defined here. 
+"""
 import dotenv
 import os
 

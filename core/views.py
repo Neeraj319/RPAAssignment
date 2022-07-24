@@ -25,7 +25,15 @@ async def get_videos(
     """
     Returns a list of videos from the database.
     if every parameter is None, it returns all videos.\n
-    Else it returns videos that match the parameters.
+    Else it returns videos that match the parameters.\n
+        {
+        "start_length": float, (in seconds)
+        "end_length": float, (in seconds)
+        "start_size": float, (in bytes)
+        "end_size": float, (in bytes)
+        "start_date": str, (in format "YYYY-MM-DD")
+        "end_date": str, (in format "YYYY-MM-DD")
+        }
     """
     return services.get_videos_fromdb(
         db_session,
@@ -82,6 +90,10 @@ async def post_video(
 
 
 async def stream_video(file_name: str):
+    """
+    Controller for streaming video from the filesystem.
+    """
+
     try:
         file_content = services.get_data_from_file(f"uploads/{file_name}")
         return StreamingResponse(
@@ -94,10 +106,14 @@ async def stream_video(file_name: str):
 
 
 async def calculate_payment(
-    video_length: float = 1,
-    video_size: float = 1,
+    video_length: float,
+    video_size: float,
     video_type: str = Depends(dependencies.video_type_checker),
 ):
+    """
+    controller for calculating payment according to passed parameters\n
+        response body: {"total": float}
+    """
     payment = {"total": 0}
     if video_size < 524_288_000:
         payment["total"] += 5

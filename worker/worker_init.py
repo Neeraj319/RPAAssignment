@@ -17,6 +17,7 @@ def check_video_length(video_id: int):
     cursor.execute("SELECT url FROM videos WHERE id = %s", (video_id,))
     data = cursor.fetchone()
     if data:
+        # using ffmpeg to get the length of the video
         result = subprocess.run(
             [
                 "ffprobe",
@@ -51,6 +52,9 @@ def check_video_length(video_id: int):
 
 @dramatiq.actor
 def check_video_size(video_id: int):
+    """
+    checks the size of the video and updates the database accordingly
+    """
     cursor.execute("SELECT url FROM videos WHERE id = %s", (video_id,))
     data = cursor.fetchone()
     if data:

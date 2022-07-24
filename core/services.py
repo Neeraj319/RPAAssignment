@@ -80,5 +80,8 @@ def write_to_disk(file: UploadFile, video_id: int) -> None:
 
 
 def get_data_from_file(file_path: str) -> Generator | None:
+    """
+    yields video data from a file
+    """
     with open(file_path, "rb") as f:
         yield f.read()
