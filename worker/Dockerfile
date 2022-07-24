@@ -2,7 +2,7 @@ FROM python:3.10-slim-buster
 
 ARG POETRY_VERSION=1.1.12
 
-ENV PYTHONUNBUFFERED=1
+ENV PYTHONUNBUFFERED=1 
 RUN apt update && apt install ffmpeg -y
 
 WORKDIR /worker

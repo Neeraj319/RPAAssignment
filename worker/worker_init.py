@@ -7,7 +7,6 @@ import os
 connection = psycopg2.connect(os.environ.get("DB_URL"))
 cursor = connection.cursor()
 
-
 r = RedisBroker(url=os.environ.get("REDIS_URL"))
 dramatiq.set_broker(r)
 

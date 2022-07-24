@@ -12,6 +12,7 @@ services:
       - redis_dramatiq 
     environment:
       - DB_URL=postgresql://postgres:postgres@db:5432/video_db
+      - REDIS_URL=redis://redis_dramatiq:6379
   
   db:
     image: postgres:13-alpine
