@@ -3,6 +3,11 @@ from fastapi import UploadFile, HTTPException, status
 
 
 class FileTypeChecker:
+    """
+    Dependency for checking file type\n
+    This dependency only checks for file type not string.
+    """
+
     def __init__(
         self,
         allowed_extension_type: Tuple = ("mp4", "mkv"),
@@ -27,6 +32,10 @@ class FileTypeChecker:
 
 
 def video_type_checker(video_type: str):
+    """
+    Dependency for checking request body's video type `string`\n
+    not a actual file type but the video type `string`
+    """
     if video_type in ("mp4", "mkv"):
         return video_type
     else:

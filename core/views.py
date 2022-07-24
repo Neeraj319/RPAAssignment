@@ -22,6 +22,11 @@ async def get_videos(
     end_date: str = None,
     db_session: Session = Depends(db_init.get_db),
 ):
+    """
+    Returns a list of videos from the database.
+    if every parameter is None, it returns all videos.\n
+    Else it returns videos that match the parameters.
+    """
     return services.get_videos_fromdb(
         db_session,
         start_length=start_length,
@@ -33,17 +38,13 @@ async def get_videos(
     )
 
 
-async def pre_post_video(
-    video_schema: schema.VideoPydanticModel,
-    db_session: Session = Depends(db_init.get_db),
-):
-    return services.insert_video(db_session, video_schema)
-
-
 async def get_video(
     id: int,
     db_session: Session = Depends(db_init.get_db),
 ):
+    """
+    returns a video object in json format according to its id
+    """
     if value := services.get_video_by_id(db_session=db_session, video_id=id):
         return value
     else:
@@ -54,8 +55,17 @@ async def post_video(
     background_task: BackgroundTasks,
     file: UploadFile = Depends(dependencies.FileTypeChecker()),
     db_session: Session = Depends(db_init.get_db),
-):
+) -> schema.VideoPydanticModel:
+    """
+    This controller handles the video upload.\n
+        request_body: {file : video}
+    returns a new video object in json format.\n
+        response body: {id: int, url: str, created_at: str, status: str, remarks: str, length: float, size: float}
+    """
+
+    # check if file with same name exists in the filesystem
     if services.get_video_by_url(video_url=file.filename, db_session=db_session):
+        # generate a new file name
         name, extension = file.filename.split(".")
         name = name + "".join(
             random.choices(string.ascii_letters + string.digits, k=10)
@@ -66,8 +76,8 @@ async def post_video(
     video: schema.VideoPydanticModel = services.insert_video(
         video_schema=video_pydantic, db_session=db_session
     )
-    background_task.add_task(services.write_to_disk, file=file, video_id=video.id)
 
+    background_task.add_task(services.write_to_disk, file=file, video_id=video.id)
     return video
 
 

@@ -1,18 +1,11 @@
 from sqlalchemy import Column, Enum, Float, Integer, String, DateTime, VARCHAR
 from sqlalchemy.sql import func
 from sqlalchemy.ext.declarative import declarative_base
-import enum
+from . import enums
 
 Base = declarative_base()
 
 metadata = Base.metadata
-
-
-class StatusEnum(enum.Enum):
-    on_queue = "on_queue"
-    processing = "processing"
-    done = "done"
-    canceled = "canceled"
 
 
 class Video(Base):
@@ -26,7 +19,7 @@ class Video(Base):
         default=func.now(),
     )
     status = Column(
-        Enum(StatusEnum),
+        Enum(enums.StatusEnum),
         nullable=False,
     )
     size = Column(Float, nullable=True)
