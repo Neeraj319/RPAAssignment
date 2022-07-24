@@ -9,6 +9,8 @@ class VideoPydanticModel(BaseModel):
     created_at: Optional[datetime.datetime] = None
     status: str
     remarks: Optional[str] = None
+    length: Optional[float] = None
+    size: Optional[float] = None
 
     class Config:
         orm_mode = True

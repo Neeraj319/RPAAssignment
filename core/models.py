@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, Boolean, VARCHAR
+from sqlalchemy import Column, Float, Integer, String, DateTime, Boolean, VARCHAR
 from sqlalchemy.sql import func
 from sqlalchemy.ext.declarative import declarative_base
 import sqlalchemy.types as types
@@ -40,8 +40,11 @@ class Video(Base):
                 ("on queue", "on queue"),
                 ("processing", "processing"),
                 ("done", "done"),
+                ("canceled", "canceled"),
             )
         ),
         nullable=False,
     )
+    size = Column(Float, nullable=True)
+    length = Column(Float, nullable=True)
     remarks = Column(String(length=100), nullable=True)

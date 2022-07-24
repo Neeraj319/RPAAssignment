@@ -31,7 +31,8 @@ def check_video_length(video_id: int):
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
         )
-        if float(result.stdout) > 600:
+        length = float(result.stdout)
+        if length > 600:
             cursor.execute(
                 "UPDATE videos SET status = 'canceled', remarks = 'video length more than 10 minutes' WHERE id = %s",
                 (video_id,),
@@ -40,8 +41,8 @@ def check_video_length(video_id: int):
             os.remove(f"uploads/{data[0]}")
             return
         cursor.execute(
-            "UPDATE videos SET status = 'done', remarks = 'checks completed' WHERE id = %s",
-            (video_id,),
+            "UPDATE videos SET status = 'done', remarks = 'checks completed', length = %s WHERE id = %s",
+            (length, video_id),
         )
         connection.commit()
     else:
@@ -67,5 +68,9 @@ def check_video_size(video_id: int):
             connection.commit()
             os.remove(f"uploads/{file_name}")
             return
-
+        cursor.execute(
+            "UPDATE videos SET size = %s WHERE id = %s",
+            (file_bytes_data, video_id),
+        )
+        connection.commit()
         check_video_length.send(video_id=video_id)
