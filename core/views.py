@@ -14,13 +14,22 @@ import string, random
 
 
 async def get_videos(
-    length: float = None,
-    size: float = None,
-    created_at: int = None,
+    start_length: float = None,
+    end_length: float = None,
+    start_size: float = None,
+    end_size: float = None,
+    start_date: str = None,
+    end_date: str = None,
     db_session: Session = Depends(db_init.get_db),
 ):
     return services.get_videos_fromdb(
-        db_session, length=length, size=size, created_at=created_at
+        db_session,
+        start_length=start_length,
+        end_length=end_length,
+        start_size=start_size,
+        end_size=end_size,
+        start_date=start_date,
+        end_date=end_date,
     )
 
 
