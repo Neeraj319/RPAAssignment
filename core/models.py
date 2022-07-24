@@ -1,11 +1,27 @@
 from sqlalchemy import Column, Integer, String, DateTime, Boolean, VARCHAR
 from sqlalchemy.sql import func
 from sqlalchemy.ext.declarative import declarative_base
+import sqlalchemy.types as types
 
 
 Base = declarative_base()
 
 metadata = Base.metadata
+
+
+class ChoiceType(types.TypeDecorator):
+
+    impl = types.String
+
+    def __init__(self, choices, **kw):
+        self.choices = dict(choices)
+        super(ChoiceType, self).__init__(**kw)
+
+    def process_bind_param(self, value, dialect):
+        return [k for k, v in self.choices.items() if v == value][0]
+
+    def process_result_value(self, value, dialect):
+        return self.choices[value]
 
 
 class Video(Base):
@@ -18,4 +34,14 @@ class Video(Base):
         nullable=False,
         default=func.now(),
     )
-    status = Column(VARCHAR(length=200), nullable=True)
+    status = Column(
+        ChoiceType(
+            choices=(
+                ("on queue", "on queue"),
+                ("processing", "processing"),
+                ("done", "done"),
+            )
+        ),
+        nullable=False,
+    )
+    remarks = Column(String(length=100), nullable=True)

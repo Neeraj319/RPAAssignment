@@ -1,5 +1,5 @@
-from typing import Tuple, Any
-from fastapi import Depends, UploadFile, HTTPException, status
+from typing import Tuple
+from fastapi import UploadFile, HTTPException, status
 
 
 class FileTypeChecker:
@@ -11,7 +11,7 @@ class FileTypeChecker:
         self.allowed_extension_type = allowed_extension_type
         self.allowed_file = allowed_file
 
-    async def __call__(self, file: UploadFile):
+    async def __call__(self, file: UploadFile) -> UploadFile:
         print("in file type checker")
 
         content_type = file.content_type.split("/")

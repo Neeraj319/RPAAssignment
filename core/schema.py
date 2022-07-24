@@ -7,7 +7,8 @@ class VideoPydanticModel(BaseModel):
     id: Optional[int] = None
     url: Optional[str] = None
     created_at: Optional[datetime.datetime] = None
-    status: Optional[str] = None
+    status: str
+    remarks: Optional[str] = None
 
     class Config:
         orm_mode = True

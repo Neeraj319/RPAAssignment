@@ -1,10 +1,14 @@
-from fastapi import Depends, HTTPException, Response, File, UploadFile, BackgroundTasks
+from fastapi import (
+    Depends,
+    HTTPException,
+    Response,
+    UploadFile,
+    BackgroundTasks,
+    status,
+)
 from videostore import db_init
 from sqlalchemy.orm import Session
-from core import services
-from core import schema as core_schema
-from fastapi import status
-from . import dependencies
+from . import dependencies, schema, services
 from starlette.responses import StreamingResponse
 import string, random
 
@@ -14,7 +18,7 @@ async def get_videos(db_session: Session = Depends(db_init.get_db)):
 
 
 async def pre_post_video(
-    video_schema: core_schema.VideoPydanticModel,
+    video_schema: schema.VideoPydanticModel,
     db_session: Session = Depends(db_init.get_db),
 ):
     return services.insert_video(db_session, video_schema)
@@ -42,10 +46,8 @@ async def post_video(
         )
         file.filename = f"{name}.{extension}"
 
-    video_pydantic = core_schema.VideoPydanticModel(
-        url=file.filename, status="video on queue"
-    )
-    video: core_schema.VideoPydanticModel = services.insert_video(
+    video_pydantic = schema.VideoPydanticModel(url=file.filename, status="on queue")
+    video: schema.VideoPydanticModel = services.insert_video(
         video_schema=video_pydantic, db_session=db_session
     )
     background_task.add_task(services.write_to_disk, file=file, video_id=video.id)
@@ -53,17 +55,12 @@ async def post_video(
     return video
 
 
-def get_data_from_file(file_path: str):
-    with open(file_path, "rb") as f:
-        yield f.read()
-
-
 async def stream_video(file_name: str):
     try:
-        file_content = get_data_from_file(f"uploads/{file_name}")
+        file_content = services.get_data_from_file(f"uploads/{file_name}")
         return StreamingResponse(
             content=file_content,
-            media_type="video/mp4",
+            media_type=f"video/{file_name.split('.')[-1]}",
             status_code=status.HTTP_200_OK,
         )
     except FileNotFoundError:

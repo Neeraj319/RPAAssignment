@@ -33,14 +33,14 @@ def check_video_length(video_id: int):
         )
         if float(result.stdout) > 600:
             cursor.execute(
-                "UPDATE videos SET status = 'canceled : video length too long' WHERE id = %s",
+                "UPDATE videos SET status = 'canceled', remarks = 'video length more than 10 minutes' WHERE id = %s",
                 (video_id,),
             )
             connection.commit()
             os.remove(f"uploads/{data[0]}")
             return
         cursor.execute(
-            "UPDATE videos SET status = 'done' WHERE id = %s",
+            "UPDATE videos SET status = 'done', remarks = 'checks completed' WHERE id = %s",
             (video_id,),
         )
         connection.commit()
@@ -61,7 +61,7 @@ def check_video_size(video_id: int):
         file_bytes_data = os.stat(f"uploads/{file_name}").st_size
         if file_bytes_data > 1073741824:
             cursor.execute(
-                "UPDATE videos SET status = 'canceled : file size too large' WHERE id = %s",
+                "UPDATE videos SET status = 'canceled', remarks = 'file size greater than 1 GB' WHERE id = %s",
                 (video_id,),
             )
             connection.commit()
