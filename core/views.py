@@ -13,8 +13,15 @@ from starlette.responses import StreamingResponse
 import string, random
 
 
-async def get_videos(db_session: Session = Depends(db_init.get_db)):
-    return services.get_videos_fromdb(db_session)
+async def get_videos(
+    length: float = None,
+    size: float = None,
+    created_at: int = None,
+    db_session: Session = Depends(db_init.get_db),
+):
+    return services.get_videos_fromdb(
+        db_session, length=length, size=size, created_at=created_at
+    )
 
 
 async def pre_post_video(
@@ -46,7 +53,7 @@ async def post_video(
         )
         file.filename = f"{name}.{extension}"
 
-    video_pydantic = schema.VideoPydanticModel(url=file.filename, status="on queue")
+    video_pydantic = schema.VideoPydanticModel(url=file.filename, status="on_queue")
     video: schema.VideoPydanticModel = services.insert_video(
         video_schema=video_pydantic, db_session=db_session
     )
