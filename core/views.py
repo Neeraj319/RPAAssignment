@@ -91,7 +91,7 @@ async def post_video(
 
 async def stream_video(file_name: str):
     """
-    Controller for streaming video from the filesystem.
+    returns playable video stream
     """
 
     try:
@@ -111,7 +111,7 @@ async def calculate_payment(
     video_type: str = Depends(dependencies.video_type_checker),
 ):
     """
-    controller for calculating payment according to passed parameters\n
+    calculates payment according to passed parameters\n
         response body: {"total": float}
     """
     payment = {"total": 0}

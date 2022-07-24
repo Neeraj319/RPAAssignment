@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from core import routes
 
 
-app = FastAPI(name="Video Upload")
+app = FastAPI(title="Video Upload")
 
 
 app.include_router(routes.router)
@@ -10,4 +10,4 @@ app.include_router(routes.router)
 
 @app.get("/")
 def root():
-    return "welcome to the api got to /docs for more "
+    return "welcome to the api go to /docs for more "
