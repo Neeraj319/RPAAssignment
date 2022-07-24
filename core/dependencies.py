@@ -25,3 +25,13 @@ class FileTypeChecker:
                 detail="only mk4 or mp4 files allowed",
             )
         return file
+
+
+def video_type_checker(video_type: str):
+    if video_type in ("mp4", "mkv"):
+        return video_type
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="only mk4 or mp4 files allowed",
+        )

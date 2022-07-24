@@ -65,3 +65,20 @@ async def stream_video(file_name: str):
         )
     except FileNotFoundError:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+
+
+async def calculate_payment(
+    video_length: float = 1,
+    video_size: float = 1,
+    video_type: str = Depends(dependencies.video_type_checker),
+):
+    payment = {"total": 0}
+    if video_size < 524_288_000:
+        payment["total"] += 5
+    else:
+        payment["total"] += 12.5
+    if video_length < 378:
+        payment["total"] += 12.5
+    else:
+        payment["total"] += 20
+    return payment
