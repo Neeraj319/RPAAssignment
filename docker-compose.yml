@@ -10,7 +10,8 @@ services:
     depends_on:
       - db
       - redis_hughie
-    env_file: .env
+    environment:
+      - DB_URL=postgresql://postgres:postgres@db:5432/video_db
   
   db:
     image: postgres:13-alpine
@@ -31,7 +32,10 @@ services:
     depends_on:
       - redis_hughie
       - app
-    
+      - db
+    environment:
+      - DB_URL=postgresql://postgres:postgres@db:5432/video_db
+      - REDIS_URL=redis://redis_dramatiq:6379
   redis_dramatiq:
     image: redis:6.2-alpine
     restart: always
