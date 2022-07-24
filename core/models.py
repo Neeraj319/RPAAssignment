@@ -12,7 +12,9 @@ class Video(Base):
     __tablename__ = "videos"
 
     id = Column(Integer, primary_key=True, index=True)
-    url = Column(VARCHAR(length=200), nullable=False, unique=True)
+    url = Column(
+        VARCHAR(length=200), nullable=False, unique=True
+    )  # this also refers to the file name in the filesystem
     created_at = Column(
         DateTime(timezone=True),
         nullable=False,

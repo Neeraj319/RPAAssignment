@@ -9,7 +9,7 @@ services:
       - video_uploads:/app/uploads
     depends_on:
       - db
-      - redis_hughie
+      - redis_dramatiq 
     environment:
       - DB_URL=postgresql://postgres:postgres@db:5432/video_db
   
@@ -30,7 +30,7 @@ services:
       - ./worker/:/worker
       - video_uploads:/worker/uploads
     depends_on:
-      - redis_hughie
+      - redis_dramatiq 
       - app
       - db
     environment:
