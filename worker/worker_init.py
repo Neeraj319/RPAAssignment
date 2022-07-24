@@ -4,11 +4,11 @@ from dramatiq.brokers.redis import RedisBroker
 import subprocess
 import os
 
-connection = psycopg2.connect("postgresql://postgres:postgres@db:5432/video_db")
+connection = psycopg2.connect(os.environ.get("DB_URL"))
 cursor = connection.cursor()
 
 
-r = RedisBroker(url="redis://redis_dramatiq:6379")
+r = RedisBroker(url=os.environ.get("REDIS_URL"))
 dramatiq.set_broker(r)
 
 
