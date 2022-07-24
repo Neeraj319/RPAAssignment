@@ -32,7 +32,7 @@ def check_video_length(video_id: int):
             stderr=subprocess.STDOUT,
         )
         length = float(result.stdout)
-        if length > 600:
+        if length > 600:  # check if video length is more than 10 minutes
             cursor.execute(
                 "UPDATE videos SET status = 'canceled', remarks = 'video length more than 10 minutes' WHERE id = %s",
                 (video_id,),
@@ -63,7 +63,7 @@ def check_video_size(video_id: int):
         connection.commit()
         file_name = data[0]
         file_bytes_data = os.stat(f"uploads/{file_name}").st_size
-        if file_bytes_data > 1073741824:
+        if file_bytes_data > 1073741824:  # check if the file is greater than 1GB
             cursor.execute(
                 "UPDATE videos SET status = 'canceled', remarks = 'file size greater than 1 GB' WHERE id = %s",
                 (video_id,),

@@ -24,6 +24,6 @@ class Video(Base):
         Enum(enums.StatusEnum),
         nullable=False,
     )
-    size = Column(Float, nullable=True)
-    length = Column(Float, nullable=True)
+    size = Column(Float, nullable=True)  # size is saved in bytes
+    length = Column(Float, nullable=True)  # length is saved in seconds
     remarks = Column(String(length=100), nullable=True)
